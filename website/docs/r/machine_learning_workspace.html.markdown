@@ -370,6 +370,8 @@ The following arguments are supported:
 
 * `image_build_compute_name` - (Optional) The compute name for image build of the Machine Learning Workspace.
 
+* `system_datastores_auth_mode` - (Optional) The auth mode for specifying the authentication mode used to access system datastores. Possible values are `access` and `identity`.
+
 * `description` - (Optional) The description of this Machine Learning Workspace.
 
 * `encryption` - (Optional) An `encryption` block as defined below. Changing this forces a new resource to be created.

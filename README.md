@@ -38,6 +38,20 @@ provider "azurerm" {
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/features-block
   features {}
 }
+  
+# Example: Machine Learning Workspace with system_datastores_auth_mode
+resource "azurerm_machine_learning_workspace" "example" {
+  name                = "example-workspace"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  application_insights_id = azurerm_application_insights.example.id
+  key_vault_id        = azurerm_key_vault.example.id
+  storage_account_id  = azurerm_storage_account.example.id
+  identity            = {
+    type = "SystemAssigned"
+  }
+  system_datastores_auth_mode = "AccessKey" # Allowed: AccessKey, Identity, UserDelegationSAS
+}
 
 # 3. Create a resource group
 resource "azurerm_resource_group" "example" {

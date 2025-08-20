@@ -259,6 +259,19 @@ func resourceMachineLearningWorkspace() *pluginsdk.Resource {
 				Computed: true,
 			},
 
+			"system_datastores_auth_mode": {
+				Type:     pluginsdk.TypeString,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice(workspaces.PossibleValuesForSystemDatastoresAuthMode(), false),
+				Default: func() interface{} {
+					values := workspaces.PossibleValuesForSystemDatastoresAuthMode()
+					if len(values) > 0 {
+						return values[0]
+					}
+					return "AccessKey"
+				}(),
+			},
+
 			"tags": commonschema.Tags(),
 		},
 	}
@@ -351,6 +364,10 @@ func resourceMachineLearningWorkspaceCreate(d *pluginsdk.ResourceData, meta inte
 
 	if v, ok := d.GetOk("primary_user_assigned_identity"); ok {
 		workspace.Properties.PrimaryUserAssignedIdentity = pointer.To(v.(string))
+	}
+
+	if v, ok := d.GetOk("system_datastores_auth_mode"); ok {
+		workspace.Properties.SystemDatastoresAuthMode = pointer.To(v.(string))
 	}
 
 	featureStore := expandMachineLearningWorkspaceFeatureStore(d.Get("feature_store").([]interface{}))
@@ -452,6 +469,10 @@ func resourceMachineLearningWorkspaceUpdate(d *pluginsdk.ResourceData, meta inte
 		payload.Properties.ManagedNetwork, _ = expandMachineLearningWorkspaceManagedNetwork(d.Get("managed_network").([]interface{}))
 	}
 
+	if d.HasChange("system_datastores_auth_mode") {
+		payload.Properties.SystemDatastoresAuthMode = pointer.To(d.Get("system_datastores_auth_mode").(string))
+	}
+
 	if d.HasChange("sku_name") {
 		payload.Sku = &workspaces.Sku{
 			Name: d.Get("sku_name").(string),
@@ -550,6 +571,7 @@ func resourceMachineLearningWorkspaceRead(d *pluginsdk.ResourceData, meta interf
 			d.Set("friendly_name", props.FriendlyName)
 			d.Set("high_business_impact", props.HbiWorkspace)
 			d.Set("image_build_compute_name", props.ImageBuildCompute)
+			d.Set("system_datastores_auth_mode", props.SystemDatastoresAuthMode)
 			d.Set("discovery_url", props.DiscoveryURL)
 			d.Set("primary_user_assigned_identity", props.PrimaryUserAssignedIdentity)
 			d.Set("public_network_access_enabled", *props.PublicNetworkAccess == workspaces.PublicNetworkAccessEnabled)

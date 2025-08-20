@@ -12,6 +12,8 @@ ENHANCEMENTS:
 * `azurerm_logic_app_standard` - refactored to leverage shared code with other `appservice` apps ([#30272](https://github.com/hashicorp/terraform-provider-azurerm/issues/30272))
 * `azurerm_machine_learning_workspace` - support `provision_on_creation_enabled` property ([#30312](https://github.com/hashicorp/terraform-provider-azurerm/issues/30312))
 
+* `azurerm_machine_learning_workspace` - add support for `system_datastores_auth_mode` property ([#22150](https://github.com/hashicorp/terraform-provider-azurerm/issues/22150))
+
 ## 4.39.0 (August 08, 2025)
 
 FEATURES:
